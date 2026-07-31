@@ -30,6 +30,33 @@ estaVivo(Persona, Anio) :-
 
 
 
+% Punto 2
+% conoceHazana(Persona, AnioEnQueLaConocio, Medio, Hazana).
+% hazana(Nombre, [Integrantes], Lugar).
+conoceHazana(wirbel, 1390, presencio, hazana(rescatarHermana, [stark, fern], klares)).
+conoceHazana(frieren, 1390, presencio, hazana(rescatarHermana, [stark, fern], klares)).
+
+conoceHazana(lawine, 1393, cancion, hazana(destruirAura, [frieren], weise)).
+conoceHazana(voll, 1400, libro(50), hazana(destruirAura, [denken], auberst)).
+
+conoceHazana(serie, 1335, libro(100), hazana(destruirReyDemonio, [frieren, himmel, heiter, eisen], ende)).
+conoceHazana(kanne, 1375, presencio, hazana(recuperarGato, [himmel, frieren], weise)).
+
+esRecordada(Hazana, Persona, AnioConsulta) :-
+    conoceHazana(Persona, AnioAdquisicion, Medio, Hazana),
+    AnioConsulta >= AnioAdquisicion,
+    recuerdoVigente(Medio, Persona, AnioAdquisicion, AnioConsulta).
+
+recuerdoVigente(presencio, Persona, _, AnioConsulta) :-
+    estaVivo(Persona, AnioConsulta).
+
+recuerdoVigente(cancion, _, AnioAdquisicion, AnioConsulta) :-
+    AnioConsulta =< AnioAdquisicion + 15.
+
+recuerdoVigente(libro(Paginas), _, AnioAdquisicion, AnioConsulta) :-
+    AnioConsulta =< AnioAdquisicion + Paginas.
+
+
 :- begin_tests(tpIntegrador, []).
     test("Una persona esta viva si ya nacio y no supero su esperanza de vida") :-
         estaVivo(kanne, 1370).

@@ -42,8 +42,10 @@ conoceHazana(voll, 1400, libro(50), hazana(destruirAura, [denken], auberst)).
 conoceHazana(serie, 1335, libro(100), hazana(destruirReyDemonio, [frieren, himmel, heiter, eisen], ende)).
 conoceHazana(kanne, 1375, presencio, hazana(recuperarGato, [himmel, frieren], weise)).
 
+% Modifico "conoceHazana(Persona, AnioAdquisicion, Medio, Hazana)" por 
+% "conoceHazana(Persona, AnioAdquisicion, Medio, hazana(Hazana, _, _))" para que no haya conflicto con el predicado pasoAlOlvido/2
 esRecordada(Hazana, Persona, AnioConsulta) :-
-    conoceHazana(Persona, AnioAdquisicion, Medio, Hazana),
+    conoceHazana(Persona, AnioAdquisicion, Medio, hazana(Hazana, _, _)),
     AnioConsulta >= AnioAdquisicion,
     recuerdoVigente(Medio, Persona, AnioAdquisicion, AnioConsulta).
 
@@ -55,6 +57,37 @@ recuerdoVigente(cancion, _, AnioAdquisicion, AnioConsulta) :-
 
 recuerdoVigente(libro(Paginas), _, AnioAdquisicion, AnioConsulta) :-
     AnioConsulta =< AnioAdquisicion + Paginas.
+
+% b)
+estaCorroborada(Hazana):-
+    conoceHazana(_, _, _, hazana(Hazana, _, _)),
+    not(tieneVersionesDistintas(Hazana)).
+
+tieneVersionesDistintas(Hazana):-
+    conoceHazana(_, _, _, hazana(Hazana, _, Lugar1)),
+    conoceHazana(_, _, _, hazana(Hazana, _, Lugar2)),
+    Lugar1 \= Lugar2.
+
+tieneVersionesDistintas(Hazana):-
+    conoceHazana(_, _, _, hazana(Hazana, Integrantes1, _)),
+    conoceHazana(_, _, _, hazana(Hazana, Integrantes2, _)),
+    Integrantes1 \= Integrantes2.
+
+% c) Queremos saber si en cierto año una hazaña pasó al olvido, lo cuál ocurre si ya nadie la recuerda en ese año.
+
+pasoAlOlvido(Hazana, AnioConsulta):-
+    conoceHazana(_, _, _, hazana(Hazana, _, _)),
+    not(esRecordada(Hazana, _, AnioConsulta)).
+
+% Punto 3
+% conmemora(Pueblo, Hazana, ModoDeConmemorar).
+% diaFestivo(AnioQueSeCelebro).
+% estatua(Material, NombreDeEstatua, AnioConstruido, [AniosDeMantenimiento]).
+conmemora(weise, hazana(destruirReyDemonio, [frieren, himmel, heiter, eisen], ende), diaFestivo(1340)).
+conmemora(auberst, hazana(destruirReyDemonio, [frieren, himmel, heiter, eisen], ende), estatua(bronce, equipoDeHeroes, 1370, [1400, 1450])).
+conmemora(auberst, hazana(destruirSchlat, [heroeDelSur], ende), estatua(marmol, heroeDelSur, 1340, [1410])).
+
+
 
 
 :- begin_tests(tpIntegrador, []).

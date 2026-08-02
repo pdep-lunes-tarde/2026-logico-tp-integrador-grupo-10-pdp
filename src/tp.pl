@@ -87,8 +87,39 @@ conmemora(weise, hazana(destruirReyDemonio, [frieren, himmel, heiter, eisen], en
 conmemora(auberst, hazana(destruirReyDemonio, [frieren, himmel, heiter, eisen], ende), estatua(bronce, equipoDeHeroes, 1370, [1400, 1450])).
 conmemora(auberst, hazana(destruirSchlat, [heroeDelSur], ende), estatua(marmol, heroeDelSur, 1340, [1410])).
 
+%3.b
+conoceHazana(Persona, AnioAdquisicion, Medio, Hazana) :-
+    habitante(Persona, Pueblo, AnioNacimiento, _),
+    conmemora(Pueblo, Hazana, Medio),
+    anioInicioConmemoracion(Medio, AnioInicio),
+    AnioAdquisicion is max(AnioInicio, AnioNacimiento).
 
+anioInicioConmemoracion(diaFestivo(Anio), Anio).
+anioInicioConmemoracion(estatua(_, _, Anio, _), Anio).
 
+recuerdoVigente(diaFestivo(_), Persona, _, AnioConsulta) :-
+    estaVivo(Persona, AnioConsulta).
+
+recuerdoVigente(Estatua, Persona, _, AnioConsulta) :-
+    Estatua = estatua(_, _, _, _), 
+    estaVivo(Persona, AnioConsulta),
+    estatuaEnBuenEstado(Estatua, AnioConsulta).
+
+estatuaEnBuenEstado(estatua(marmol, _, _, Mantenimientos), AnioConsulta) :-
+    member(AnioMantenimiento, Mantenimientos),
+    AnioMantenimiento =< AnioConsulta.
+
+estatuaEnBuenEstado(estatua(marmol, _, AnioConstruido, _), AnioConsulta) :-
+    Edad is AnioConsulta - AnioConstruido,
+    Edad =< 30.
+
+estatuaEnBuenEstado(estatua(bronce, _, _, Mantenimientos), AnioConsulta) :-
+    member(AnioMantenimiento, Mantenimientos),
+    AnioMantenimiento =< AnioConsulta.
+
+estatuaEnBuenEstado(estatua(bronce, _, AnioConstruido, _), AnioConsulta) :-
+    Edad is AnioConsulta - AnioConstruido,
+    Edad =< 15.
 
 :- begin_tests(tpIntegrador, []).
     test("Una persona esta viva si ya nacio y no supero su esperanza de vida") :-
@@ -108,4 +139,13 @@ conmemora(auberst, hazana(destruirSchlat, [heroeDelSur], ende), estatua(marmol, 
 
     test("Un elfo sigue vivo sin importar cuantos anios pasen desde su nacimiento", nondet) :-
         estaVivo(serie, 5000).
+    
+    test("Una persona recuerda una hazana si en su pueblo hay una estatua en buen estado que la conmemora", nondet) :-
+        esRecordada(destruirReyDemonio, lawine, 1400).
+
+    test("Una persona no recuerda una hazana si la estatua de su pueblo ya no se encuentra en buen estado") :-
+        not(esRecordada(destruirReyDemonio, lawine, 1390)).
+
+    test("Una persona recuerda una hazana si en su pueblo se conmemora con un dia festivo", nondet) :-
+        esRecordada(destruirReyDemonio, fern, 1400).
 :- end_tests(tpIntegrador).

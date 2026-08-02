@@ -139,6 +139,39 @@ estatuaEnBuenEstado(estatua(bronce, _, AnioConstruido, _), AnioConsulta) :-
 
     test("Un elfo sigue vivo sin importar cuantos anios pasen desde su nacimiento", nondet) :-
         estaVivo(serie, 5000).
+
+    test("Una persona no recuerda una hazana en un anio previo a haberla conocido") :-
+        not(esRecordada(destruirAura, lawine, 1380)).
+
+    test("Una persona recuerda una hazana conocida por una cancion mientras no hayan pasado mas de 15 anios", nondet) :-
+        esRecordada(destruirAura, lawine, 1400).
+
+    test("Una persona ya no recuerda una hazana conocida por una cancion si pasaron mas de 15 anios") :-
+        not(esRecordada(destruirAura, lawine, 1410)).
+
+    test("Una persona recuerda una hazana conocida por un libro mientras los anios transcurridos no superen su cantidad de paginas", nondet) :-
+        esRecordada(destruirAura, voll, 1450).
+
+    test("Una persona ya no recuerda una hazana conocida por un libro si los anios transcurridos superan su cantidad de paginas") :-
+        not(esRecordada(destruirAura, voll, 1460)).
+
+    test("Una persona recuerda una hazana que presencio mientras siga con vida", nondet) :-
+        esRecordada(rescatarHermana, wirbel, 1430).
+
+    test("Una persona ya no recuerda una hazana que presencio si ya supero su esperanza de vida") :-
+        not(esRecordada(rescatarHermana, wirbel, 1440)).
+
+    test("Una hazana esta corroborada si todas las personas que la conocen coinciden en sus detalles (solo existe una version)", nondet) :-
+        estaCorroborada(rescatarHermana).
+
+    test("Una hazana no esta corroborada si existen versiones de la misma con diferentes heroes o lugares") :-
+        not(estaCorroborada(destruirAura)).
+
+    test("Una hazana pasa al olvido en un anio si ya nadie la recuerda", nondet) :-
+        pasoAlOlvido(destruirAura, 1460).
+
+    test("Una hazana no pasa al olvido en un anio si al menos una persona aun la recuerda") :-
+        not(pasoAlOlvido(destruirAura, 1440)).
     
     test("Una persona recuerda una hazana si en su pueblo hay una estatua en buen estado que la conmemora", nondet) :-
         esRecordada(destruirReyDemonio, lawine, 1400).

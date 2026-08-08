@@ -67,12 +67,9 @@ estaCorroborada(Hazana):-
     not(tieneVersionesDistintas(Hazana)).
 
 tieneVersionesDistintas(Hazana):-
-    conoceHazana(_, _, _, hazana(Hazana, _, Lugar1)),
-    conoceHazana(_, _, _, hazana(Hazana, _, Lugar2)),
-    Lugar1 \= Lugar2.
-tieneVersionesDistintas(Hazana):-
-    conoceHazana(_, _, _, hazana(Hazana, Integrantes1, _)),
-    conoceHazana(_, _, _, hazana(Hazana, Integrantes2, _)),
+    conoceHazana(_, _, _, hazana(Hazana, Integrantes1, Lugar1)),
+    conoceHazana(_, _, _, hazana(Hazana, Integrantes2, Lugar2)),
+    Lugar1 \= Lugar2,
     Integrantes1 \= Integrantes2.
 
 % c) Queremos saber si en cierto año una hazaña pasó al olvido, lo cuál ocurre si ya nadie la recuerda en ese año.

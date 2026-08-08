@@ -16,19 +16,15 @@ habitante(eisen, riegel, 1150, enano).
 esperanzaDeVida(humano, 80).
 esperanzaDeVida(enano, 350).
 
-estaVivo(Persona, Anio):-
-    habitante(Persona, _, Nacimiento , elfo),
-    Anio >= Nacimiento.
-
 estaVivo(Persona, Anio) :-
-    habitante(Persona, _, Nacimiento, Raza),
-    Raza \= elfo,
-    esperanzaDeVida(Raza, Esperanza),
+    habitante(Persona, _, Nacimiento, _),
     Anio >= Nacimiento,
-    Anio =< Nacimiento + Esperanza.
-    
+    not(murio(Persona, Anio)).
 
-
+murio(Persona, Anio) :-
+    habitante(Persona, _, Nacimiento, Raza),
+    esperanzaDeVida(Raza, Esperanza),
+    Anio > Nacimiento + Esperanza.
 
 % Punto 2
 % conoceHazana(Persona, AnioEnQueLaConocio, Medio, Hazana).

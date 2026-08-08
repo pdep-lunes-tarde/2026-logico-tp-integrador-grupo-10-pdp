@@ -31,12 +31,16 @@ murio(Persona, Anio) :-
 % hazana(Nombre, [Integrantes], Lugar).
 conoceHazana(wirbel, 1390, presencio, hazana(rescatarHermana, [stark, fern], klares)).
 conoceHazana(frieren, 1390, presencio, hazana(rescatarHermana, [stark, fern], klares)).
-
 conoceHazana(lawine, 1393, cancion, hazana(destruirAura, [frieren], weise)).
 conoceHazana(voll, 1400, libro(50), hazana(destruirAura, [denken], auberst)).
-
 conoceHazana(serie, 1335, libro(100), hazana(destruirReyDemonio, [frieren, himmel, heiter, eisen], ende)).
 conoceHazana(kanne, 1375, presencio, hazana(recuperarGato, [himmel, frieren], weise)).
+
+conoceHazana(Persona, AnioAdquisicion, Medio, Hazana) :-
+    habitante(Persona, Pueblo, AnioNacimiento, _),
+    conmemora(Pueblo, Hazana, Medio),
+    anioInicioConmemoracion(Medio, AnioInicio),
+    AnioAdquisicion is max(AnioInicio, AnioNacimiento).
 
 % Modifico "conoceHazana(Persona, AnioAdquisicion, Medio, Hazana)" por 
 % "conoceHazana(Persona, AnioAdquisicion, Medio, hazana(Hazana, _, _))" para que no haya conflicto con el predicado pasoAlOlvido/2
@@ -47,13 +51,16 @@ esRecordada(Hazana, Persona, AnioConsulta) :-
 
 recuerdoVigente(presencio, Persona, _, AnioConsulta) :-
     estaVivo(Persona, AnioConsulta).
-
 recuerdoVigente(cancion, _, AnioAdquisicion, AnioConsulta) :-
     AnioConsulta =< AnioAdquisicion + 15.
-
 recuerdoVigente(libro(Paginas), _, AnioAdquisicion, AnioConsulta) :-
     AnioConsulta =< AnioAdquisicion + Paginas.
-
+recuerdoVigente(diaFestivo(_), Persona, _, AnioConsulta) :-
+    estaVivo(Persona, AnioConsulta).
+recuerdoVigente(Estatua, Persona, _, AnioConsulta) :-
+    Estatua = estatua(_, _, _, _), 
+    estaVivo(Persona, AnioConsulta),
+    estatuaEnBuenEstado(Estatua, AnioConsulta).
 % b)
 estaCorroborada(Hazana):-
     conoceHazana(_, _, _, hazana(Hazana, _, _)),
@@ -63,7 +70,6 @@ tieneVersionesDistintas(Hazana):-
     conoceHazana(_, _, _, hazana(Hazana, _, Lugar1)),
     conoceHazana(_, _, _, hazana(Hazana, _, Lugar2)),
     Lugar1 \= Lugar2.
-
 tieneVersionesDistintas(Hazana):-
     conoceHazana(_, _, _, hazana(Hazana, Integrantes1, _)),
     conoceHazana(_, _, _, hazana(Hazana, Integrantes2, _)),
@@ -84,35 +90,19 @@ conmemora(auberst, hazana(destruirReyDemonio, [frieren, himmel, heiter, eisen], 
 conmemora(auberst, hazana(destruirSchlat, [heroeDelSur], ende), estatua(marmol, heroeDelSur, 1340, [1410])).
 
 %3.b
-conoceHazana(Persona, AnioAdquisicion, Medio, Hazana) :-
-    habitante(Persona, Pueblo, AnioNacimiento, _),
-    conmemora(Pueblo, Hazana, Medio),
-    anioInicioConmemoracion(Medio, AnioInicio),
-    AnioAdquisicion is max(AnioInicio, AnioNacimiento).
 
 anioInicioConmemoracion(diaFestivo(Anio), Anio).
 anioInicioConmemoracion(estatua(_, _, Anio, _), Anio).
 
-recuerdoVigente(diaFestivo(_), Persona, _, AnioConsulta) :-
-    estaVivo(Persona, AnioConsulta).
-
-recuerdoVigente(Estatua, Persona, _, AnioConsulta) :-
-    Estatua = estatua(_, _, _, _), 
-    estaVivo(Persona, AnioConsulta),
-    estatuaEnBuenEstado(Estatua, AnioConsulta).
-
 estatuaEnBuenEstado(estatua(marmol, _, _, Mantenimientos), AnioConsulta) :-
     member(AnioMantenimiento, Mantenimientos),
     AnioMantenimiento =< AnioConsulta.
-
 estatuaEnBuenEstado(estatua(marmol, _, AnioConstruido, _), AnioConsulta) :-
     Edad is AnioConsulta - AnioConstruido,
     Edad =< 30.
-
 estatuaEnBuenEstado(estatua(bronce, _, _, Mantenimientos), AnioConsulta) :-
     member(AnioMantenimiento, Mantenimientos),
     AnioMantenimiento =< AnioConsulta.
-
 estatuaEnBuenEstado(estatua(bronce, _, AnioConstruido, _), AnioConsulta) :-
     Edad is AnioConsulta - AnioConstruido,
     Edad =< 15.

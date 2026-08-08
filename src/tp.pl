@@ -120,7 +120,7 @@ estatuaEnBuenEstado(estatua(bronce, _, AnioConstruido, _), AnioConsulta) :-
     test("Una persona ya no esta viva al superar su esperanza de vida") :-
         not(estaVivo(voll, 1551)).
 
-    test("Un elfo sigue vivo sin importar cuantos anios pasen desde su nacimiento", nondet) :-
+    test("Una persona sin limite de esperanza de vida sigue viva sin importar cuantos anios pasen desde su nacimiento", nondet) :-
         estaVivo(serie, 5000).
 
     test("Una persona no recuerda una hazana en un anio previo a haberla conocido") :-

@@ -47,19 +47,17 @@ conoceHazana(Persona, AnioAdquisicion, Medio, Hazana) :-
 esRecordada(Hazana, Persona, AnioConsulta) :-
     conoceHazana(Persona, AnioAdquisicion, Medio, hazana(Hazana, _, _)),
     AnioConsulta >= AnioAdquisicion,
+    estaVivo(Persona, AnioConsulta),
     recuerdoVigente(Medio, Persona, AnioAdquisicion, AnioConsulta).
 
-recuerdoVigente(presencio, Persona, _, AnioConsulta) :-
-    estaVivo(Persona, AnioConsulta).
+recuerdoVigente(presencio, _, _, _).
 recuerdoVigente(cancion, _, AnioAdquisicion, AnioConsulta) :-
     AnioConsulta =< AnioAdquisicion + 15.
 recuerdoVigente(libro(Paginas), _, AnioAdquisicion, AnioConsulta) :-
     AnioConsulta =< AnioAdquisicion + Paginas.
-recuerdoVigente(diaFestivo(_), Persona, _, AnioConsulta) :-
-    estaVivo(Persona, AnioConsulta).
-recuerdoVigente(Estatua, Persona, _, AnioConsulta) :-
+recuerdoVigente(diaFestivo(_), _, _, _) .
+recuerdoVigente(Estatua, _, _, AnioConsulta) :-
     Estatua = estatua(_, _, _, _), 
-    estaVivo(Persona, AnioConsulta),
     estatuaEnBuenEstado(Estatua, AnioConsulta).
 % b)
 estaCorroborada(Hazana):-

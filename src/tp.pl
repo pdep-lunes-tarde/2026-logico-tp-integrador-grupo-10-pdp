@@ -89,18 +89,18 @@ conmemora(auberst, hazana(destruirSchlat, [heroeDelSur], ende), estatua(marmol, 
 anioInicioConmemoracion(diaFestivo(Anio), Anio).
 anioInicioConmemoracion(estatua(_, _, Anio, _), Anio).
 
-estatuaEnBuenEstado(estatua(marmol, _, _, Mantenimientos), AnioConsulta) :-
+vidaUtilEstatua(marmol, 30).
+vidaUtilEstatua(bronce, 15).
+
+estatuaEnBuenEstado(estatua(_,_,_,Mantenimientos), AnioConsulta):-
     member(AnioMantenimiento, Mantenimientos),
     AnioMantenimiento =< AnioConsulta.
-estatuaEnBuenEstado(estatua(marmol, _, AnioConstruido, _), AnioConsulta) :-
+
+estatuaEnBuenEstado(estatua(Material,_,AnioConstruido,_), AnioConsulta):-
+    vidaUtilEstatua(Material, LimiteAnios),
     Edad is AnioConsulta - AnioConstruido,
-    Edad =< 30.
-estatuaEnBuenEstado(estatua(bronce, _, _, Mantenimientos), AnioConsulta) :-
-    member(AnioMantenimiento, Mantenimientos),
-    AnioMantenimiento =< AnioConsulta.
-estatuaEnBuenEstado(estatua(bronce, _, AnioConstruido, _), AnioConsulta) :-
-    Edad is AnioConsulta - AnioConstruido,
-    Edad =< 15.
+    Edad =< LimiteAnios.
+
 
 :- begin_tests(tpIntegrador, []).
     test("Una persona esta viva si ya nacio y no supero su esperanza de vida") :-

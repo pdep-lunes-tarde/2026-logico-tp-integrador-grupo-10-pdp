@@ -92,9 +92,11 @@ anioInicioConmemoracion(estatua(_, _, Anio, _), Anio).
 vidaUtilEstatua(marmol, 30).
 vidaUtilEstatua(bronce, 15).
 
-estatuaEnBuenEstado(estatua(_,_,_,Mantenimientos), AnioConsulta):-
+estatuaEnBuenEstado(estatua(Material,_,_,Mantenimientos), AnioConsulta):-
+    vidaUtilEstatua(Material, LimiteAnios),
     member(AnioMantenimiento, Mantenimientos),
-    AnioMantenimiento =< AnioConsulta.
+    AnioMantenimiento =< AnioConsulta,
+    AnioConsulta - AnioMantenimiento =< LimiteAnios.
 
 estatuaEnBuenEstado(estatua(Material,_,AnioConstruido,_), AnioConsulta):-
     vidaUtilEstatua(Material, LimiteAnios),

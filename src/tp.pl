@@ -56,9 +56,8 @@ recuerdoVigente(cancion, _, AnioAdquisicion, AnioConsulta) :-
 recuerdoVigente(libro(Paginas), _, AnioAdquisicion, AnioConsulta) :-
     AnioConsulta =< AnioAdquisicion + Paginas.
 recuerdoVigente(diaFestivo(_), _, _, _) .
-recuerdoVigente(Estatua, _, _, AnioConsulta) :-
-    Estatua = estatua(_, _, _, _), 
-    estatuaEnBuenEstado(Estatua, AnioConsulta).
+recuerdoVigente(estatua(Material, Nombre, Anio, Mantenimientos), _, _, AnioConsulta) :-
+    estatuaEnBuenEstado(estatua(Material, Nombre, Anio, Mantenimientos), AnioConsulta).
 % b)
 estaCorroborada(Hazana):-
     conoceHazana(_, _, _, hazana(Hazana, _, _)),

@@ -102,6 +102,28 @@ estatuaEnBuenEstado(estatua(Material,_,AnioConstruido,_), AnioConsulta):-
     Edad is AnioConsulta - AnioConstruido,
     Edad =< LimiteAnios.
 
+% Punto 4
+
+puebloRecuerda(Pueblo, Hazana, Anio) :- 
+    habitante(Persona, Pueblo, _,_),
+    esRecordada(Hazana, Persona, Anio).
+
+paginasLeidasEnPueblo(Pueblo, Anio, TotalPaginas) :-
+    habitante(_, Pueblo, _, _),
+    findall(Paginas, leyoEnPueblo(Pueblo, Paginas, Anio), ListaPaginas),
+    sum_list(ListaPaginas, TotalPaginas).
+
+leyoEnPueblo(Pueblo, Paginas, Anio) :-
+    habitante(Persona, Pueblo, _, _), 
+    conoceHazana(Persona, Anio, libro(Paginas), _).
+
+puebloMasLector(Pueblo, Anio) :-
+    paginasLeidasEnPueblo(Pueblo, Anio, Paginas),
+    forall(
+        paginasLeidasEnPueblo(_, Anio, OtrasPaginas),
+        Paginas >= OtrasPaginas
+    ).
+
 
 :- begin_tests(tpIntegrador, []).
     test("Una persona esta viva si ya nacio y no supero su esperanza de vida") :-

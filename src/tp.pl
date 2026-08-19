@@ -124,6 +124,36 @@ puebloMasLector(Pueblo, Anio) :-
         Paginas >= OtrasPaginas
     ).
 
+puebloChismoso(Pueblo, Anio) :-
+    puebloRecuerda(Pueblo, _, Anio),
+    forall(
+        puebloRecuerda(Pueblo, Hazana, Anio),
+        not(estaCorroborada(Hazana))
+    ).
+
+hazanaImportante(Hazana, Pueblo, Anio) :-
+    puebloRecuerda(Pueblo, Hazana, Anio),
+    forall(
+        habitanteVivo(Persona, Pueblo, Anio),
+        esRecordada(Hazana, Persona, Anio)
+    ).
+
+habitanteVivo(Persona, Pueblo, Anio) :-
+    habitante(Persona, Pueblo, _, _),
+    estaVivo(Persona, Anio).
+
+tiemposSinPrecedentes(Pueblo, Anio) :-
+    puebloRecuerda(Pueblo, _, Anio),
+    forall(
+        hazanaImportante(Hazana, Pueblo, Anio),     
+        presenciadaPorHabitante(Hazana, Pueblo, Anio) 
+    ).
+
+presenciadaPorHabitante(Hazana, Pueblo, Anio) :-
+    habitante(Persona, Pueblo, _, _),
+    conoceHazana(Persona, _, presencio, hazana(Hazana, _, _)),
+    esRecordada(Hazana, Persona, Anio).
+
 
 :- begin_tests(tpIntegrador, []).
     test("Una persona esta viva si ya nacio y no supero su esperanza de vida") :-

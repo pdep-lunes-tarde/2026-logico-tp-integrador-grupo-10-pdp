@@ -154,6 +154,26 @@ presenciadaPorHabitante(Hazana, Pueblo, Anio) :-
     conoceHazana(Persona, _, presencio, hazana(Hazana, _, _)),
     esRecordada(Hazana, Persona, Anio).
 
+% Punto 5
+esHeroe(Nombre):-
+    conoceHazana(_,_,_,hazana(_, ListaParticipantes, _)),
+    member(Nombre, ListaParticipantes).
+
+inspiro(Inspirador, Heroe):-
+    conoceHazana(Heroe, _, _, hazana(_, ListaInspiradores, _)),
+    member(Inspirador, ListaInspiradores),
+    esHeroe(Heroe).
+
+cadenaDeInspiracion(HeroeInicial, Cadena):-
+    armarCadena(HeroeInicial, [HeroeInicial], Cadena).
+
+armarCadena(HeroeActual, _, [HeroeActual]).
+armarCadena(HeroeActual, ListaHeroes, [HeroeActual | Resto]):-
+    inspiro(HeroeActual, SiguienteHeroe),
+    not(member(SiguienteHeroe, ListaHeroes)),
+    armarCadena(SiguienteHeroe, [SiguienteHeroe | ListaHeroes], Resto).
+    
+    
 
 :- begin_tests(tpIntegrador, []).
     test("Una persona esta viva si ya nacio y no supero su esperanza de vida") :-
@@ -215,4 +235,28 @@ presenciadaPorHabitante(Hazana, Pueblo, Anio) :-
 
     test("Una persona recuerda una hazana si en su pueblo se conmemora con un dia festivo", nondet) :-
         esRecordada(destruirReyDemonio, fern, 1400).
+
+    test("Una persona es heroe si participo en al menos una hazana conocida", nondet):-
+        esHeroe(frieren).
+
+    test("Una persona no es heroe si no participo en ninguna hazana"):-
+        not(esHeroe(wirbel)).
+
+    test("Una persona inspira a un heroe si participo en una hazana que el heroe conoce", nondet):-
+        inspiro(frieren, fern),
+        inspiro(stark, frieren).
+
+    test("Nadie inspira a una persona si esta no conoce ninguna hazana"):-
+        not(inspiro(_, eisen)).
+
+    test("Una cadena de inspiracion es valida si cada heroe inspiro al proximo en la secuencia", nondet):-
+        cadenaDeInspiracion(himmel, [himmel, fern, frieren, denken]).
+
+    test("Una cadena de inspiracion es invalida si el heroe anterior no inspiro al proximo"):-
+        not(cadenaDeInspiracion(denken, [denken, frieren])).
+
+    test("Una cadena de inspiracion es invalida si contiene heroes repetidos"):-
+        not(cadenaDeInspiracion(frieren, [frieren, fern, frieren])).
+    
+    
 :- end_tests(tpIntegrador).

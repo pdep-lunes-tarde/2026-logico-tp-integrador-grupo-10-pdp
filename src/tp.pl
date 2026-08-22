@@ -165,7 +165,9 @@ inspiro(Inspirador, Heroe):-
     esHeroe(Heroe).
 
 cadenaDeInspiracion(HeroeInicial, Cadena):-
-    armarCadena(HeroeInicial, [HeroeInicial], Cadena).
+    armarCadena(HeroeInicial, [HeroeInicial], Cadena),
+    length(Cadena, CantidadDeLaCadena),
+    CantidadDeLaCadena >1.
 
 armarCadena(HeroeActual, _, [HeroeActual]).
 armarCadena(HeroeActual, ListaHeroes, [HeroeActual | Resto]):-
@@ -173,7 +175,26 @@ armarCadena(HeroeActual, ListaHeroes, [HeroeActual | Resto]):-
     not(member(SiguienteHeroe, ListaHeroes)),
     armarCadena(SiguienteHeroe, [SiguienteHeroe | ListaHeroes], Resto).
     
-    
+% Punto 6
+
+dreamTeam(Heroe, Equipo) :-
+    esHeroe(Heroe), 
+    cadenaDeInspiracion(_, Cadena),
+    append(AntecesoresDelHeroe, [Heroe | _], Cadena),
+    AntecesoresDelHeroe \= [], 
+    subgruposDeAntecesores(AntecesoresDelHeroe, SubgrupoDeAntecesores),
+    SubgrupoDeAntecesores \= [], 
+    permutation([Heroe | SubgruposDeAntecesores], Equipo).
+
+subgruposDeAntecesores([], []).
+
+subgruposDeAntecesores([Persona | RestoAntecesores], [Persona | SubgrupoACompletar]) :- 
+    subgruposDeAntecesores(RestoAntecesores, SubgrupoACompletar).
+
+subgruposDeAntecesores([_ | RestoAntecesores], SubgrupoACompletar) :- 
+    subgruposDeAntecesores(RestoAntecesores, SubgrupoACompletar).
+
+
 
 :- begin_tests(tpIntegrador, []).
     test("Una persona esta viva si ya nacio y no supero su esperanza de vida") :-

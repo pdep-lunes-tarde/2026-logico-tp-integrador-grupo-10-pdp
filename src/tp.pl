@@ -180,7 +180,7 @@ armarCadena(HeroeActual, ListaHeroes, [HeroeActual | Resto]):-
 dreamTeam(Heroe, Equipo) :-
     esHeroe(Heroe), 
     cadenaDeInspiracion(_, Cadena),
-    append(AntecesoresDelHeroe, [Heroe | _], Cadena),
+    append(AntecesoresDelHeroe, [Heroe], Cadena),
     AntecesoresDelHeroe \= [], 
     subgruposDeAntecesores(AntecesoresDelHeroe, SubgruposDeAntecesores),
     SubgruposDeAntecesores \= [], 

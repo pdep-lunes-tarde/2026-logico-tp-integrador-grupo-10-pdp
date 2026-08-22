@@ -182,8 +182,8 @@ dreamTeam(Heroe, Equipo) :-
     cadenaDeInspiracion(_, Cadena),
     append(AntecesoresDelHeroe, [Heroe | _], Cadena),
     AntecesoresDelHeroe \= [], 
-    subgruposDeAntecesores(AntecesoresDelHeroe, SubgrupoDeAntecesores),
-    SubgrupoDeAntecesores \= [], 
+    subgruposDeAntecesores(AntecesoresDelHeroe, SubgruposDeAntecesores),
+    SubgruposDeAntecesores \= [], 
     permutation([Heroe | SubgruposDeAntecesores], Equipo).
 
 subgruposDeAntecesores([], []).

@@ -343,5 +343,13 @@ subgruposDeAntecesores([_ | RestoAntecesores], SubgrupoACompletar) :-
     test("Una cadena de inspiracion es invalida si contiene heroes repetidos"):-
         not(cadenaDeInspiracion(frieren, [frieren, fern, frieren])).
     
+    test("Un dream team es valido si estan incluidos el heroe y su/s antecesor/es", nondet):-
+        dreamTeam(fern, [fern, himmel]).
+    test("Un dream team es valido si estan incluidos el heroe y su/s antecesor/es, sin importar el orden de los miembros del equipo", nondet):-
+        dreamTeam(fern, [himmel, fern]).
+    test("Un dream team en el que esta incluido solo el heroe no es valido"):-
+        not(dreamTeam(fern, [fern])).
+    test("Un dream team compuesto unicamente de los antecesores del héroe no es valido"):-
+        not(dreamTeam(fern, [frieren])).
     
 :- end_tests(tpIntegrador).

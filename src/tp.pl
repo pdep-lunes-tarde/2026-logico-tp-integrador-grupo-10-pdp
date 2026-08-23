@@ -117,6 +117,25 @@ leyoEnPueblo(Pueblo, Paginas, Anio) :-
     habitante(Persona, Pueblo, _, _), 
     conoceHazana(Persona, Anio, libro(Paginas), _).
 
+puebloMusical(Pueblo, Anio) :-
+    habitante(_, Pueblo, _, _), 
+
+    findall(Hazana, puebloRecuerda(Pueblo, Hazana, Anio), TodasLasHazanas),
+    list_to_set(TodasLasHazanas, HazanasUnicas),
+    length(HazanasUnicas, CantidadTotal),
+
+    findall(Hazana, puebloRecuerdaPorCancion(Pueblo, Hazana, Anio), HazanasPorCancion),
+    list_to_set(HazanasPorCancion, CancionesUnicas),
+    length(CancionesUnicas, CantidadCanciones),
+    CantidadCanciones > CantidadTotal / 2.
+
+puebloRecuerdaPorCancion(Pueblo, Hazana, AnioConsulta) :-
+    habitante(Persona, Pueblo, _, _),
+    conoceHazana(Persona, AnioAdquisicion, cancion, hazana(Hazana, _, _)),
+    AnioConsulta >= AnioAdquisicion,
+    estaVivo(Persona, AnioConsulta),
+    recuerdoVigente(cancion, Persona, AnioAdquisicion, AnioConsulta).
+
 puebloMasLector(Pueblo, Anio) :-
     paginasLeidasEnPueblo(Pueblo, Anio, Paginas),
     forall(
@@ -262,6 +281,46 @@ subgruposDeAntecesores([_ | RestoAntecesores], SubgrupoACompletar) :-
     test("Una persona recuerda una hazana si en su pueblo se conmemora con un dia festivo", nondet) :-
         esRecordada(destruirReyDemonio, fern, 1400).
 
+    test("Un pueblo recuerda una hazana en un anio si al menos un habitante la recuerda", nondet) :-
+        puebloRecuerda(weise, destruirReyDemonio, 1400),
+        puebloRecuerda(klares, rescatarHermana, 1395).
+
+    test("Un pueblo no recuerda una hazana en un anio si ninguno de sus habitantes la recuerda") :-
+        not(puebloRecuerda(klares, destruirReyDemonio, 1395)).
+
+    test("La cantidad de paginas leidas en un pueblo es la suma de las paginas de los libros leidos por sus habitantes en ese anio", nondet) :-
+        paginasLeidasEnPueblo(weise, 1335, 100).
+
+    test("La cantidad de paginas leidas en un pueblo es cero si ninguno de sus habitantes leyo un libro en ese anio", nondet) :-
+        paginasLeidasEnPueblo(weise, 1336, 0).
+
+    test("Un pueblo es el mas lector si la cantidad de paginas leidas es mayor o igual a la de los demas pueblos en ese anio", nondet) :-
+        puebloMasLector(ende, 1400).
+
+    test("Un pueblo es musical si mas de la mitad de las hazanas que recuerda son por canciones", nondet) :-
+        puebloMusical(auberst, 1395).
+
+    test("Un pueblo no es musical si la mayoria de las hazanas que recuerda no provienen de canciones") :-
+        not(puebloMusical(weise, 1400)).
+
+    test("Un pueblo es chismoso si recuerda hazanas pero ninguna de ellas esta corroborada", nondet) :-
+        puebloChismoso(ende, 1420).
+
+    test("Un pueblo no es chismoso si al menos una de las hazanas que recuerda esta corroborada") :-
+        not(puebloChismoso(weise, 1400)).
+
+    test("Una hazana es importante para un pueblo si todos los habitantes vivos de ese pueblo la recuerdan en ese anio", nondet) :-
+        hazanaImportante(destruirReyDemonio, weise, 1400).
+
+    test("Una hazana no es importante para un pueblo si al menos un habitante vivo no la recuerda en ese anio") :-
+        not(hazanaImportante(recuperarGato, weise, 1400)).
+
+    test("Un pueblo vive tiempos sin precedentes si todas sus hazanas importantes son recordadas porque alguien las presencio", nondet) :-
+        tiemposSinPrecedentes(klares, 1395).
+
+    test("Un pueblo no vive tiempos sin precedentes si alguna de sus hazanas importantes no fue presenciada por un habitante") :-
+        not(tiemposSinPrecedentes(weise, 1400)).
+    
     test("Una persona es heroe si participo en al menos una hazana conocida", nondet):-
         esHeroe(frieren).
 

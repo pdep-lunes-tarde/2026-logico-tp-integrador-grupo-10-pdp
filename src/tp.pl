@@ -178,13 +178,18 @@ armarCadena(HeroeActual, ListaHeroes, [HeroeActual | Resto]):-
 % Punto 6
 
 dreamTeam(Heroe, Equipo) :-
+    habitante(Heroe, _, _, _), 
+    setof(UnEquipo, posibleDreamTeam(Heroe, UnEquipo), EquiposUnicos),
+    member(Equipo, EquiposUnicos).
+
+posibleDreamTeam(Heroe, EquipoDelHeroe) :-
     esHeroe(Heroe), 
     cadenaDeInspiracion(_, Cadena),
     append(AntecesoresDelHeroe, [Heroe], Cadena),
     AntecesoresDelHeroe \= [], 
     subgruposDeAntecesores(AntecesoresDelHeroe, SubgruposDeAntecesores),
     SubgruposDeAntecesores \= [], 
-    permutation([Heroe | SubgruposDeAntecesores], Equipo).
+    permutation([Heroe | SubgruposDeAntecesores], EquipoDelHeroe).
 
 subgruposDeAntecesores([], []).
 

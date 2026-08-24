@@ -2,7 +2,7 @@
 
 ## Integrantes
 
-**Equipo:** 
+**Equipo:** Grupo-10
 
 ## Fecha de entrega de parte 1
 

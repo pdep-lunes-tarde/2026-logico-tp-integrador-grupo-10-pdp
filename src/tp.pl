@@ -350,7 +350,7 @@ subgruposDeAntecesores([_ | RestoAntecesores], SubgrupoACompletar) :-
         dreamTeam(fern, [himmel, fern]).
     test("Un dream team en el que esta incluido solo el heroe no es valido"):-
         not(dreamTeam(fern, [fern])).
-    test("Un dream team compuesto unicamente de los antecesores del héroe no es valido"):-
+    test("Un dream team compuesto unicamente por los antecesores del heroe no es valido"):-
         not(dreamTeam(fern, [frieren])).
     
 :- end_tests(tpIntegrador).

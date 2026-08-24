@@ -117,6 +117,13 @@ leyoEnPueblo(Pueblo, Paginas, Anio) :-
     habitante(Persona, Pueblo, _, _), 
     conoceHazana(Persona, Anio, libro(Paginas), _).
 
+puebloMasLector(Pueblo, Anio) :-
+    paginasLeidasEnPueblo(Pueblo, Anio, Paginas),
+    forall(
+        paginasLeidasEnPueblo(_, Anio, OtrasPaginas),
+        Paginas >= OtrasPaginas
+    ).
+
 puebloMusical(Pueblo, Anio) :-
     habitante(_, Pueblo, _, _), 
 
@@ -136,12 +143,6 @@ puebloRecuerdaPorCancion(Pueblo, Hazana, AnioConsulta) :-
     estaVivo(Persona, AnioConsulta),
     recuerdoVigente(cancion, Persona, AnioAdquisicion, AnioConsulta).
 
-puebloMasLector(Pueblo, Anio) :-
-    paginasLeidasEnPueblo(Pueblo, Anio, Paginas),
-    forall(
-        paginasLeidasEnPueblo(_, Anio, OtrasPaginas),
-        Paginas >= OtrasPaginas
-    ).
 
 puebloChismoso(Pueblo, Anio) :-
     puebloRecuerda(Pueblo, _, Anio),
